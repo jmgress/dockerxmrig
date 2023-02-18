@@ -1,0 +1,15 @@
+{
+    "autosave": true,
+    "cpu": true,
+    "opencl": false,
+    "cuda": false,
+    "pools": [
+        {
+            "url": "pool.supportxmr.com:443",
+            "user": "payment token",
+            "pass": "process id",
+            "keepalive": true,
+            "tls": true
+        }
+    ]
+}
