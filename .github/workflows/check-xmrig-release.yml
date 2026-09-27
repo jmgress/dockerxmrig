@@ -42,7 +42,7 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const title = 'Update pinned XMRig release';
+            const title = `Update pinned XMRig release to ${process.env.LATEST_VERSION}`;
             const body = [
               `The Docker image is still pinned to ${process.env.PINNED_VERSION}.`,
               `Upstream XMRig has released ${process.env.LATEST_VERSION}.`,
@@ -50,22 +50,15 @@ jobs:
               'Please review the upstream release notes and update the Dockerfile, config template, and docs if the new release should be adopted.'
             ].join('\n');
 
-            const issues = await github.paginate(github.rest.issues.listForRepo, {
-              owner,
-              repo,
-              state: 'open',
-              per_page: 100
+            const query = `repo:${owner}/${repo} is:issue is:open in:title "${title}"`;
+            const result = await github.rest.search.issuesAndPullRequests({
+              q: query,
+              per_page: 10
             });
 
-            const existing = issues.find((issue) => issue.title === title);
+            const existing = result.data.items.find((issue) => issue.title === title);
             if (existing) {
-              await github.rest.issues.update({
-                owner,
-                repo,
-                issue_number: existing.number,
-                body
-              });
-              core.info(`Updated issue: ${existing.html_url}`);
+              core.info(`Issue already open: ${existing.html_url}`);
               return;
             }
 
