@@ -1,17 +1,36 @@
-FROM alpine:latest
+ARG ALPINE_VERSION=3.22
+ARG XMRIG_VERSION=v6.26.0
 
-RUN apk add --no-cache git build-base cmake libuv-dev openssl-dev hwloc-dev && \
-    git clone https://github.com/xmrig/xmrig.git && \
-    mkdir xmrig/build && \
-    cd xmrig/build && \
-    cmake .. && \
-    make -j$(nproc) && \
-    apk del git build-base cmake && \
-    rm -rf /var/cache/apk/*
+FROM alpine:${ALPINE_VERSION} AS builder
+ARG XMRIG_VERSION
 
-# Copy config.json to /xmrig/build
-# COPY config.json /xmrig/build/
+RUN apk add --no-cache \
+    build-base \
+    ca-certificates \
+    cmake \
+    hwloc-dev \
+    libuv-dev \
+    openssl-dev \
+    wget
 
-WORKDIR /xmrig/build
+WORKDIR /src/xmrig
 
-ENTRYPOINT ["./xmrig"]
+RUN wget -O /tmp/xmrig.tar.gz "https://github.com/xmrig/xmrig/archive/refs/tags/${XMRIG_VERSION}.tar.gz" \
+    && tar --strip-components=1 -xzf /tmp/xmrig.tar.gz -C /src/xmrig \
+    && cmake -S /src/xmrig -B /src/xmrig/build -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build /src/xmrig/build -j"$(nproc)" \
+    && strip /src/xmrig/build/xmrig
+
+FROM alpine:${ALPINE_VERSION}
+
+RUN apk add --no-cache \
+    hwloc \
+    libgcc \
+    libstdc++ \
+    libuv \
+    openssl
+
+COPY --from=builder /src/xmrig/build/xmrig /usr/local/bin/xmrig
+
+WORKDIR /config
+ENTRYPOINT ["/usr/local/bin/xmrig"]
