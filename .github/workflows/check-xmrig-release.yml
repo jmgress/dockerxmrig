@@ -21,7 +21,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          pinned_version=$(sed -n 's/^ARG XMRIG_VERSION=//p' Dockerfile | head -n 1)
+          pinned_version=$(awk -F= '/^[[:space:]]*ARG[[:space:]]+XMRIG_VERSION[[:space:]]*=/{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2; exit}' Dockerfile)
           latest_version=$(gh api /repos/xmrig/xmrig/releases/latest --jq .tag_name)
           echo "pinned_version=${pinned_version}" >> "$GITHUB_OUTPUT"
           echo "latest_version=${latest_version}" >> "$GITHUB_OUTPUT"
