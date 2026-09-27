@@ -40,3 +40,4 @@ COPY config.json /config/config.json
 
 WORKDIR /config
 ENTRYPOINT ["/usr/local/bin/xmrig"]
+CMD ["--config=/config/config.json"]
