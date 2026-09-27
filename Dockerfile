@@ -13,6 +13,7 @@ RUN apk add --no-cache \
     hwloc-dev \
     libuv-dev \
     openssl-dev \
+    tar \
     wget
 
 WORKDIR /src/xmrig

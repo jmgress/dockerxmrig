@@ -50,7 +50,7 @@ jobs:
               'Please review the upstream release notes and update the Dockerfile, config template, and docs if the new release should be adopted.'
             ].join('\n');
 
-            const { data: issues } = await github.rest.issues.listForRepo({
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner,
               repo,
               state: 'open',
