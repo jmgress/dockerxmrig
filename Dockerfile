@@ -35,6 +35,7 @@ RUN apk add --no-cache \
     openssl
 
 COPY --from=builder /src/xmrig/build/xmrig /usr/local/bin/xmrig
+COPY config.json /config/config.json
 
 WORKDIR /config
 ENTRYPOINT ["/usr/local/bin/xmrig"]

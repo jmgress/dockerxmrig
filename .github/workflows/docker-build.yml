@@ -17,5 +17,8 @@ jobs:
       - name: Build image
         run: docker build -t dockerxmrig:test .
 
-      - name: Smoke test image
+      - name: Smoke test version output
         run: docker run --rm dockerxmrig:test --version
+
+      - name: Smoke test mounted config
+        run: docker run --rm -v "$PWD/config.json:/config/config.json:ro" dockerxmrig:test --config=/config/config.json --dry-run

@@ -27,7 +27,7 @@ Do not bake personal wallet, pool, or worker credentials into the image.
 
 2. Edit `config.local.json` with your pool endpoint, wallet or username, password, and any additional XMRig options you need.
 
-The checked-in `config.json` is only a safe example template. Replace `pool.example.com:3333` with your actual pool host and port, and set `tls` to match that endpoint.
+The checked-in `config.json` is only a safe example template. Replace `pool.example.com:3333` with your actual pool host and port, and set `tls` to match that endpoint. The image also includes this safe template at `/config/config.json`, so you can mount your local file over that path at runtime.
 
 ## Run with a mounted config
 
