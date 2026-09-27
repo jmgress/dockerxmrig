@@ -1,15 +1,16 @@
 {
-    "autosave": true,
-    "cpu": true,
-    "opencl": false,
-    "cuda": false,
-    "pools": [
-        {
-            "url": "pool.supportxmr.com:443",
-            "user": "payment token",
-            "pass": "process id",
-            "keepalive": true,
-            "tls": true
-        }
-    ]
+  "autosave": true,
+  "cpu": true,
+  "opencl": false,
+  "cuda": false,
+  "pools": [
+    {
+      "url": "pool.example.com:3333",
+      "user": "YOUR_WALLET_OR_USERNAME",
+      "pass": "x",
+      "rig-id": "dockerxmrig",
+      "keepalive": true,
+      "tls": false
+    }
+  ]
 }

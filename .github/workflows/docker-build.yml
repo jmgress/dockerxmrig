@@ -1,0 +1,24 @@
+name: Docker build
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t dockerxmrig:test .
+
+      - name: Smoke test version output
+        run: docker run --rm dockerxmrig:test --version
+
+      - name: Smoke test mounted config
+        run: docker run --rm -v "$PWD/config.json:/config/config.json:ro" dockerxmrig:test --config=/config/config.json --dry-run
