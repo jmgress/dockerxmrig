@@ -24,6 +24,7 @@ RUN wget -O /tmp/xmrig.tar.gz "https://github.com/xmrig/xmrig/archive/refs/tags/
 FROM alpine:${ALPINE_VERSION}
 
 RUN apk add --no-cache \
+    ca-certificates \
     hwloc \
     libgcc \
     libstdc++ \

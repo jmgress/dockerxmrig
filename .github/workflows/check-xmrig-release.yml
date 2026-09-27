@@ -21,8 +21,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          pinned_version=$(sed -n 's/^ARG XMRIG_VERSION=//p' Dockerfile)
-          latest_version=$(curl -fsSL https://api.github.com/repos/xmrig/xmrig/releases/latest | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"])')
+          pinned_version=$(sed -n 's/^ARG XMRIG_VERSION=//p' Dockerfile | head -n 1)
+          latest_version=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/xmrig/xmrig/releases/latest | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"])')
           echo "pinned_version=${pinned_version}" >> "$GITHUB_OUTPUT"
           echo "latest_version=${latest_version}" >> "$GITHUB_OUTPUT"
 
